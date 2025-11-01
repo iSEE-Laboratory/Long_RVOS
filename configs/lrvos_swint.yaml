@@ -1,0 +1,154 @@
+# * Train
+lr:
+  desc: main model learning rate
+  value: 1e-4
+weight_decay:
+  value: 1e-4
+clip_max_norm:
+  desc: gradient clipping max norm
+  value: 0.1
+enable_amp:
+  desc: whether to enable automatic mixed precision during training
+  value: false
+seed:
+  value: 42
+
+GroundingDINO:
+  desc: "the parameter of GroundingDINO"
+  value:
+    backbone: "swin_T_224_1k"
+    position_embedding: "sine"
+    pe_temperatureH: 20
+    pe_temperatureW: 20
+    return_interm_indices: [0, 1, 2, 3]
+    backbone_freeze_keywords: None
+    enc_layers: 6
+    dec_layers: 6
+    pre_norm: false
+    dim_feedforward: 2048
+    hidden_dim: 256
+    dropout: 0.0
+    nheads: 8
+    num_queries: 900
+    query_dim: 4
+    num_patterns: 0
+    num_feature_levels: 4
+    enc_n_points: 4
+    dec_n_points: 4
+    two_stage_type: "standard"
+    two_stage_bbox_embed_share: false
+    two_stage_class_embed_share: false
+    transformer_activation: "relu"
+    dec_pred_bbox_embed_share: true
+    dn_box_noise_scale: 1.0
+    dn_label_noise_ratio: 0.5
+    dn_label_coef: 1.0
+    dn_bbox_coef: 1.0
+    embed_init_tgt: true
+    dn_labelbook_size: 2000
+    max_text_len: 256
+    text_encoder_type: "bert-base-uncased"
+    use_text_enhancer: true
+    use_fusion_layer: true
+    use_checkpoint: true
+    use_transformer_ckpt: true
+    use_text_cross_attention: true
+    text_dropout: 0.0
+    fusion_dropout: 0.0
+    fusion_droppath: 0.1
+    sub_sentence_present: true
+    pretrained_path: "pretrained/gdinot-1.8m-odvg.pth"
+    aux_loss: true
+
+    full_tune: false
+    query_decay: 0.5
+    dec_lora: true
+    enc_lora: true
+    lora_rank: 32
+    temporal_layer: 3
+    tracking_alpha: 0.1
+
+    trainable_keys:
+      - feat_map
+      - backbone.0.norm0
+      - bbox_embed
+      - lora
+      - pixel_decoder
+      - mask_decoder
+      - motion
+      - temporal
+      - input_proj
+
+    lora_exclued_keys:
+      - bbox_embed
+      - out_proj
+      - motion
+
+    SegHead:
+      mask_dim: 256
+      n_heads: 8
+      n_points: 16
+      dropout: 0.0
+      n_layers: 3
+      use_self_attention: true
+      use_text_cross_attention: true
+
+# * Matcher
+set_cost_class:
+  value: 2
+set_cost_bbox:
+  desc: the coefficient in the box matching cost
+  value: 1
+set_cost_giou:
+  desc: the coefficient in the box giou cost
+  value: 1
+set_cost_mask:
+  desc: mask coefficient in the matching cost
+  value: 5
+set_cost_dice:
+  desc: dice coefficient in the matching cost
+  value: 5
+set_cost_proj:
+  value: 2
+
+# * Loss coefficients
+cls_loss_coef:
+  value: 2
+bbox_loss_coef:
+  value: 1
+giou_loss_coef:
+  value: 1
+mask_loss_coef:
+  value: 5
+dice_loss_coef:
+  value: 5
+proj_loss_coef:
+  value: 2
+eos_coef:
+  desc: Relative classification weight of the no-object class
+  value: 0.1
+
+# * Dataset Parameters
+dataset_name:
+  value: long_rvos
+dataset_path:
+  value: data/long_rvos_split
+output_dir:
+  desc: path where to save, keep empty for an auto-generated date-time labeled folder
+  value: 'output'
+num_workers:
+  desc: number of workers to load data
+  value: 8
+binary:
+  desc: whether binary classification
+  value: true
+num_frames:
+  value: 6
+sampling_step:
+  value: 10
+motion_len: # 1~11
+  value: 3
+
+eval_batch_size:
+  desc: "total test batch size"
+  value: 1

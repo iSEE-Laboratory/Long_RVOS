@@ -1,0 +1,31 @@
+# 核心深度学习库
+torch>=1.9.0
+torchvision>=0.10.0
+transformers>=4.20.0
+
+# 数据处理库
+numpy>=1.21.0
+Pillow>=8.0.0
+opencv-python>=4.5.0
+h5py>=3.0.0
+pycocotools>=2.0.0
+
+# 工具库
+tqdm>=4.62.0
+ruamel.yaml>=0.17.0
+easydict>=1.9
+rich>=10.0.0
+einops>=0.4.0
+timm>=0.6.0
+loralib>=0.1.0
+scipy>=1.7.0
+supervision>=0.3.0
+matplotlib>=3.4.0
+addict>=2.4.0
+yapf>=0.32.0
+
+# 注意：
+# 1. SAM2 (sam2) 需要单独安装，可能不在 PyPI 上
+#    参考: https://github.com/facebookresearch/segment-anything-2
+# 2. util 模块是本地模块，需要手动创建
+
