@@ -76,7 +76,7 @@ def main(args):
             os.makedirs(save_visualize_path_prefix)
 
     # load data
-    args.dataset_path = "/data1/tianming/long_rvos/data/long_rvos_split/"
+    args.dataset_path = "/data1/tianming/long_rvos/data/long_rvos/"
     root = Path(args.dataset_path)
     dataset_path = os.path.join(root, split)
     meta_file = os.path.join(dataset_path, "meta_expressions.json")
@@ -171,8 +171,9 @@ def sub_processor(lock, pid, args, data, save_path_prefix, save_visualize_path_p
     total_frames = 0
 
     img_folder = os.path.join(dataset_path, "JPEGImages")
-    motion_path = os.path.join(dataset_path, "motions")
-    frame_types = json.load(open(os.path.join(dataset_path, 'frame_types.json')))
+    split_name = os.path.basename(dataset_path)
+    motion_path = os.path.join("motions", split_name)
+    frame_types = json.load(open(os.path.join(motion_path, 'frame_types.json')))
 
     # 1. For each video
     for video in video_list:

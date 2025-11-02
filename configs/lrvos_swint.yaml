@@ -132,7 +132,7 @@ eos_coef:
 dataset_name:
   value: long_rvos
 dataset_path:
-  value: data/long_rvos_split
+  value: data/long_rvos
 output_dir:
   desc: path where to save, keep empty for an auto-generated date-time labeled folder
   value: 'output'

@@ -23,6 +23,7 @@ supervision>=0.3.0
 matplotlib>=3.4.0
 addict>=2.4.0
 yapf>=0.32.0
+huggingface_hub>=0.16.0
 
 # 注意：
 # 1. SAM2 (sam2) 需要单独安装，可能不在 PyPI 上

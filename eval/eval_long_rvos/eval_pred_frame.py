@@ -75,8 +75,8 @@ def eval_queue(q, rank, out_dict, pred_path, mask_path):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--pred_path", type=str, default="output/long_rvos/only_relu/test/key_frames")
-    parser.add_argument("--exp_path", type=str, default="data/long_rvos_split/test/meta_expressions.json")
-    parser.add_argument("--mask_path", type=str, default="data/long_rvos_split/test/Annotations")
+    parser.add_argument("--exp_path", type=str, default="data/long_rvos/test/meta_expressions.json")
+    parser.add_argument("--mask_path", type=str, default="data/long_rvos/test/Annotations")
     parser.add_argument("--save_name", type=str, default="keyframe_result.json")
     args = parser.parse_args()
     queue = mp.Queue()

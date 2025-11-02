@@ -156,8 +156,9 @@ def sub_processor(lock, pid, args, data, save_path_prefix, save_visualize_path_p
     model.eval()
 
     img_folder = os.path.join(dataset_path, "JPEGImages")
-    motion_path = os.path.join(dataset_path, "motions")
-    frame_types = json.load(open(os.path.join(dataset_path, 'frame_types.json')))
+    split_name = os.path.basename(dataset_path)
+    motion_path = os.path.join("motions", split_name)
+    frame_types = json.load(open(os.path.join(motion_path, 'frame_types.json')))
 
     # 1. For each video
     for video in video_list:

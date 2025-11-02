@@ -78,8 +78,8 @@ if __name__ == '__main__':
     parser.add_argument("--split", type=str, default="valid")
     args = parser.parse_args()
 
-    exp_path = f'data/long_rvos_split/{args.split}/meta_expressions.json'
-    mask_path = f'data/long_rvos_split/{args.split}/Annotations'
+    exp_path = f'data/long_rvos/{args.split}/meta_expressions.json'
+    mask_path = f'data/long_rvos/{args.split}/Annotations'
     save_name = f'static_{args.split}.json'
 
     queue = mp.Queue()

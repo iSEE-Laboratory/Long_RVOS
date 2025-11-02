@@ -36,7 +36,9 @@ class LongRVOSDataset(Dataset):
         self._transforms = make_coco_transforms(subset_type)
         self.num_frames = num_frames
         self.sampling_step = sampling_step if sampling_step > 0 else num_frames
-        self.frame_types = json.load(open(os.path.join(dataset_path, subset_type, 'frame_types.json')))
+        motions_dir = os.path.join('motions', subset_type)
+        self.frame_types = json.load(open(os.path.join(motions_dir, 'frame_types.json')))
+        self.motions_dir = motions_dir
         self.motion_len = motion_len
 
         # create video meta data
@@ -104,7 +106,7 @@ class LongRVOSDataset(Dataset):
 
             # max motion clip length is 12, the first is the key frame
             # the motion shape is T, C, H/16, W/16
-            motions = np.load(os.path.join(str(self.img_folder), "motions", f'{video}.npy'))
+            motions = np.load(os.path.join(self.motions_dir, f'{video}.npy'))
             motions = torch.from_numpy(motions)
 
             sample_indx = random.sample(frame_id, self.num_frames)
