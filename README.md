@@ -52,6 +52,7 @@ data/
 │   │   └── meta_expressions.json
 │   └── test/
 │       ├── JPEGImages/
+│       ├── Annotations/
 │       └── meta_expressions.json
 ```
 
