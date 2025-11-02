@@ -20,16 +20,12 @@ Yuting Yang¹  &emsp;
 
 </div>
 
-![visual](assets/sample.png)
 
 ## 🎯 Overview
 
 Long-RVOS is the first large-scale **long-term** referring video object segmentation benchmark, containing 2,000+ videos with an average duration exceeding **60 seconds**. 
 
-## 📢 News
-
-- `2025.11.02` Long-RVOS benchmark and ReferMo baseline code are released!
-- `2025.11.02` Dataset is available on HuggingFace Hub and Google Drive.
+![visual](assets/sample.png)
 
 ## 📦 Dataset Download
 
@@ -56,6 +52,7 @@ data/
 │   │   └── meta_expressions.json
 │   └── test/
 │       ├── JPEGImages/
+│       ├── Annotations/
 │       └── meta_expressions.json
 ```
 
@@ -154,7 +151,9 @@ PYTHONPATH=. python eval/inference_lrvos_with_motion.py \
     --split valid \
     --version refermo
 ```
-The results will be saved at `output/long_rvos/{split}/{version}`.
+> 📌 The results will be saved at `output/long_rvos/{split}/{version}`.
+> 
+> 📌 We also provide a script `eval/inference_lrvos.py` for ReferDINO-style inference, which does not use motions. 
 
 ### Evaluation
 
