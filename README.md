@@ -154,7 +154,9 @@ PYTHONPATH=. python eval/inference_lrvos_with_motion.py \
     --split valid \
     --version refermo
 ```
-The results will be saved at `output/long_rvos/{split}/{version}`.
+> 📌 The results will be saved at `output/long_rvos/{split}/{version}`.
+> 
+> 📌 We also provide a script `eval/inference_lrvos.py` for ReferDINO-style inference, which does not use motions. 
 
 ### Evaluation
 
