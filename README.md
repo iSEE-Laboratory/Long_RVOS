@@ -106,8 +106,9 @@ Download pretrained GroundingDINO weights and put them in the `pretrained` direc
 mkdir pretrained
 cd pretrained
 
+wget https://github.com/longzw1997/Open-GroundingDino/releases/download/v0.1.0/gdinot-1.8m-odvg.pth # default
 wget https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth
-wget https://github.com/longzw1997/Open-GroundingDino/releases/download/v0.1.0/gdinot-1.8m-odvg.pth
+wget https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha2/groundingdino_swinb_cogcoor.pth
 
 ```
 
@@ -119,7 +120,7 @@ If you need to extract motion frames from videos, use:
 python scripts/extract_motion.py --data_dir data/long_rvos --output_dir motions
 ```
 
-Or you can download our preprocessed motions from [Google Drive](https://drive.google.com/drive/folders/1CCspz-1o3HMlIjFRiXRD9PYzoy8Nuwcj?usp=drive_link) and extract:
+Or you can download our processed motions from [Google Drive](https://drive.google.com/drive/folders/1CCspz-1o3HMlIjFRiXRD9PYzoy8Nuwcj?usp=drive_link) and extract:
 
 ```bash
 motions/
@@ -141,6 +142,8 @@ motions/
 ```bash
 python main.py -c configs/lrvos_swint.yaml -rm train -bs 2 -ng 8 --version refermo --epochs 6
 ```
+
+Note: you can download our checkpoint from [refermo_swint.pth](https://huggingface.co/liangtm/refermo/blob/main/refermo_swint.pth) and put it in the diretory `ckpt`.
 
 ### Inference
 
