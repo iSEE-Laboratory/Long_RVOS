@@ -26,11 +26,6 @@ Yuting Yang¹  &emsp;
 
 Long-RVOS is the first large-scale **long-term** referring video object segmentation benchmark, containing 2,000+ videos with an average duration exceeding **60 seconds**. 
 
-## 📢 News
-
-- `2025.11.02` Long-RVOS benchmark and ReferMo baseline code are released!
-- `2025.11.02` Dataset is available on HuggingFace Hub and Google Drive.
-
 ## 📦 Dataset Download
 
 The Long-RVOS dataset is available on [HuggingFace Hub](https://huggingface.co/datasets/iSEE-Laboratory/Long-RVOS). Use our download script:
