@@ -135,6 +135,9 @@ if __name__ == "__main__":
 
         output_path = os.path.join(args.output_dir, split)
         os.makedirs(output_path, exist_ok=True)
+        
+        motions_path = os.path.join(output_path, "motions")
+        os.makedirs(motions_path, exist_ok=True)
 
         jpeg_images_dir = os.path.join(dataset_path, "JPEGImages")
         if not os.path.exists(jpeg_images_dir):
@@ -144,7 +147,7 @@ if __name__ == "__main__":
         video_files = [os.path.join(args.video_cache, f+'.mp4') for f in os.listdir(jpeg_images_dir)]
 
         with Pool(processes=NUM_WORKERS) as pool:
-            tasks = [(vf, output_path) for vf in video_files]
+            tasks = [(vf, motions_path) for vf in video_files]
             results = list(tqdm(
                 pool.imap(process_single_video, tasks),
                 total=len(tasks),
