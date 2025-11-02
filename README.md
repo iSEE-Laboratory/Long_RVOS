@@ -25,7 +25,7 @@ Yuting Yang¹  &emsp;
 
 Long-RVOS is the first large-scale **long-term** referring video object segmentation benchmark, containing 2,000+ videos with an average duration exceeding **60 seconds**. 
 
-![visual](assets/sample.png)
+![](assets/sample.png)
 
 ## 📦 Dataset Download
 
