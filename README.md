@@ -1,12 +1,25 @@
-# Long-RVOS: A Comprehensive Benchmark for Long-term Referring Video Object Segmentation
+<div align="center">
 
-Tianming Liang<sup>1</sup>, Haichao Jiang<sup>1</sup>, Yuting Yang<sup>1</sup>, Chaolei Tan<sup>1</sup>, Shuai Li<sup>2</sup>,  
-Wei-Shi Zheng<sup>1</sup>, Jian-Fang Hu<sup>1*</sup>  
-<sup>1</sup>Sun Yat-sen University, <sup>2</sup>Shandong University
+<h2>Long-RVOS: A Comprehensive Benchmark for Long-term Referring Video Object Segmentation</h2>
 
-**Project Page** | **Paper** | **Dataset**
+[Tianming Liang](https://tmliang.github.io/)¹  &emsp;
+Haichao Jiang¹  &emsp;
+Yuting Yang¹  &emsp;
+[Chaolei Tan](https://chaoleitan.github.io/)¹  &emsp;
+[Shuai Li](https://scholar.google.com/citations?user=GY1t5OYAAAAJ&hl=en)² &emsp;
+[Wei-Shi Zheng](https://www.isee-ai.cn/~zhwshi/)¹  &emsp;
+[Jian-Fang Hu](https://isee-ai.cn/~hujianfang/)¹*
 
-[Project Page](https://isee-laboratory.github.io/Long-RVOS) | [Paper](https://arxiv.org/html/2505.12702v2) | [Dataset](https://huggingface.co/datasets/your-repo/long-rvos)
+¹Sun Yat-sen University &emsp;
+²Shandong University
+
+<h3 align="center">
+  <a href="https://isee-laboratory.github.io/ReferDINO/" target='_blank'>Project Page</a> |
+  <a href="https://arxiv.org/abs/2501.14607" target='_blank'>Paper</a> |
+  <a href="https://huggingface.co/spaces/liangtm/referdino" target='_blank'>Demo</a>
+</h3>
+
+</div>
 
 ## 📢 News
 
@@ -16,11 +29,36 @@ Wei-Shi Zheng<sup>1</sup>, Jian-Fang Hu<sup>1*</sup>
 
 ## 🎯 Overview
 
-Long-RVOS is the first large-scale **long-term** referring video object segmentation benchmark, containing 2,000+ videos with an average duration exceeding **60 seconds**. Unlike existing RVOS datasets that focus on short clips (several seconds), Long-RVOS tackles realistic long-video challenges such as:
+Long-RVOS is the first large-scale **long-term** referring video object segmentation benchmark, containing 2,000+ videos with an average duration exceeding **60 seconds**. 
 
-- **Frequent occlusion** and disappearance-reappearance
-- **Shot changes** in long videos
-- **Complex spatiotemporal relationships** across extended temporal spans
+
+## 📦 Dataset Download
+
+The Long-RVOS dataset is available on [HuggingFace Hub](https://huggingface.co/datasets/iSEE-Laboratory/Long-RVOS). Use our download script:
+
+```bash
+python scripts/download_dataset.py \
+    --repo_id iSEE-Laboratory/Long-RVOS \
+    --output_dir data
+```
+
+Or manually download from [Google Drive](https://drive.google.com/drive/folders/19GXKf8COc_W3ZHsLvhWTzaPrxRedszac?usp=drive_link) and extract:
+
+```bash
+data/
+├── long_rvos/
+│   ├── train/
+│   │   ├── JPEGImages/
+│   │   ├── Annotations/
+│   │   └── meta_expressions.json
+│   ├── valid/
+│   │   ├── JPEGImages/
+│   │   ├── Annotations/
+│   │   └── meta_expressions.json
+│   └── test/
+│       ├── JPEGImages/
+│       └── meta_expressions.json
+```
 
 ## 🚀 Environment Setup
 
@@ -76,37 +114,6 @@ wget https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alp
 wget https://github.com/longzw1997/Open-GroundingDino/releases/download/v0.1.0/gdinot-1.8m-odvg.pth
 
 ```
-
-## 📦 Data Preparation
-
-### Download Long-RVOS Dataset
-
-The Long-RVOS dataset is available on HuggingFace Hub. Use our download script:
-
-```bash
-python scripts/download_dataset.py \
-    --repo_id iSEE-Laboratory/Long-RVOS \
-    --output_dir data
-```
-
-Or manually download from [Google Drive](https://drive.google.com/drive/folders/19GXKf8COc_W3ZHsLvhWTzaPrxRedszac?usp=drive_link) and extract:
-
-```bash
-data/
-├── long_rvos/
-│   ├── train/
-│   │   ├── JPEGImages/
-│   │   ├── Annotations/
-│   │   └── meta_expressions.json
-│   ├── valid/
-│   │   ├── JPEGImages/
-│   │   ├── Annotations/
-│   │   └── meta_expressions.json
-│   └── test/
-│       ├── JPEGImages/
-│       └── meta_expressions.json
-```
-
 
 ### Extract Motions
 
