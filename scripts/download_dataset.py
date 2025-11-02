@@ -3,6 +3,7 @@
 
 import argparse
 import tarfile
+import shutil
 from pathlib import Path
 from huggingface_hub import hf_hub_download, snapshot_download, login
 from tqdm import tqdm
@@ -45,6 +46,7 @@ def download_and_extract_split(repo_id, split, output_dir, remove_tar=False):
     files = ["JPEGImages.tar.gz", "Annotations.tar.gz"]
     success_count = 0
     
+    # Download tar files
     for filename in files:
         try:
             # Download file
@@ -80,6 +82,36 @@ def download_and_extract_split(repo_id, split, output_dir, remove_tar=False):
             
         except Exception as e:
             logger.error(f"✗ Download/extraction failed {split}/{filename}: {e}")
+    
+    # Download JSON metadata files
+    json_files = ["meta_expressions.json"]
+    for json_filename in json_files:
+        try:
+            logger.info(f"Downloading: {split}/{json_filename}")
+            json_path = hf_hub_download(
+                repo_id=repo_id,
+                filename=f"{split}/{json_filename}",
+                repo_type="dataset",
+                local_dir=str(temp_download_dir),
+                local_dir_use_symlinks=False
+            )
+            
+            json_path = Path(json_path)
+            
+            # Verify file exists
+            if not json_path.exists():
+                logger.warning(f"JSON file does not exist: {json_path}, skipping...")
+                continue
+            
+            # Copy to output directory
+            dest_path = split_output_dir / json_filename
+            shutil.copy2(json_path, dest_path)
+            logger.info(f"✓ Copied {json_filename} to {split_output_dir}")
+            success_count += 1
+            
+        except Exception as e:
+            # JSON files might not exist for all splits, so we log as warning
+            logger.warning(f"Could not download {split}/{json_filename}: {e}")
     
     # Clean up temporary directory (if empty)
     try:
@@ -160,6 +192,7 @@ def main():
                 split_output_dir = output_dir / "long_rvos" / split
                 split_output_dir.mkdir(parents=True, exist_ok=True)
                 
+                # Extract tar.gz files
                 for tar_file in split_dir.glob("*.tar.gz"):
                     if "JPEGImages" in tar_file.name:
                         extract_to = split_output_dir / "JPEGImages"
@@ -170,6 +203,15 @@ def main():
                     
                     extract_to.mkdir(parents=True, exist_ok=True)
                     extract_tar(tar_file, extract_to, remove_tar=args.remove_tar)
+                
+                # Copy JSON metadata files
+                json_files = ["meta_expressions.json"]
+                for json_filename in json_files:
+                    json_file = split_dir / json_filename
+                    if json_file.exists():
+                        dest_path = split_output_dir / json_filename
+                        shutil.copy2(json_file, dest_path)
+                        logger.info(f"✓ Copied {split}/{json_filename}")
             
             logger.info("✓ Extraction completed!")
             
@@ -179,7 +221,9 @@ def main():
     else:
         # Download files one by one
         total_success = 0
-        total_files = len(args.splits) * 2  # Each split has 2 files
+        # Each split has 2 tar files + 1 JSON file (meta_expressions.json)
+        # We count JSON files separately as they might not exist for all splits
+        total_files = len(args.splits) * 2  # Minimum: 2 tar files per split
         
         for split in args.splits:
             logger.info(f"\nProcessing split: {split}")
@@ -191,7 +235,7 @@ def main():
             )
             total_success += success
         
-        logger.info(f"\nCompleted! Successfully processed: {total_success}/{total_files} files")
+        logger.info(f"\nCompleted! Successfully processed: {total_success} files")
     
     # Validate directory structure
     logger.info("\nValidating directory structure...")
@@ -200,12 +244,21 @@ def main():
     for split in args.splits:
         split_dir = base_dir / split
         if split_dir.exists():
+            # Check required directories
             required_dirs = ["JPEGImages", "Annotations"]
             for req_dir in required_dirs:
                 if (split_dir / req_dir).exists():
                     logger.info(f"✓ {split}/{req_dir} exists")
                 else:
                     logger.warning(f"✗ {split}/{req_dir} does not exist")
+            
+            # Check JSON metadata files
+            json_files = ["meta_expressions.json"]
+            for json_filename in json_files:
+                if (split_dir / json_filename).exists():
+                    logger.info(f"✓ {split}/{json_filename} exists")
+                else:
+                    logger.warning(f"✗ {split}/{json_filename} does not exist")
         else:
             logger.warning(f"✗ {split} directory does not exist")
     
