@@ -114,7 +114,7 @@ wget https://github.com/longzw1997/Open-GroundingDino/releases/download/v0.1.0/g
 
 ```
 
-### Extract Motions
+### Motion Extraction
 
 If you need to extract motion frames from videos, use:
 
@@ -122,7 +122,20 @@ If you need to extract motion frames from videos, use:
 python scripts/extract_motion.py --data_dir data/long_rvos --output_dir motions
 ```
 
-Or you can download our preprocessed motions from [Google Drive](https://drive.google.com/drive/folders/1CCspz-1o3HMlIjFRiXRD9PYzoy8Nuwcj?usp=drive_link).
+Or you can download our preprocessed motions from [Google Drive](https://drive.google.com/drive/folders/1CCspz-1o3HMlIjFRiXRD9PYzoy8Nuwcj?usp=drive_link) and extract:
+
+```bash
+motions/
+├── train/
+│   ├── motions/
+│   └── frame_types.json
+├── valid/
+│   ├── motions/
+│   └── frame_types.json
+└── test/
+    ├── motions/
+    └── frame_types.json
+```
 
 ## 🌟 Get Started
 
@@ -141,6 +154,7 @@ PYTHONPATH=. python eval/inference_lrvos_with_motion.py \
     --split valid \
     --version refermo
 ```
+The results will be saved at `output/long_rvos/{split}/{version}`.
 
 ### Evaluation
 
