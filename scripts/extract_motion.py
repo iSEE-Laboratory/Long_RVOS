@@ -12,6 +12,8 @@ import numpy as np
 from tqdm import tqdm
 from multiprocessing import Pool
 from mvextractor.videocap import VideoCap
+import subprocess
+import tempfile
 
 
 def down_sample(motions: torch.Tensor, block_size: int=16):
@@ -67,11 +69,48 @@ def extract_motions(video_path, rescale=False):
     return motions, frame_types
 
 
+def _build_temp_video_from_jpegs(frames_dir: str, work_dir: str) -> str:
+    """Pack ordered JPEG frames into a temporary mp4 using ffmpeg.
+
+    Returns the path to the generated mp4 inside work_dir.
+    """
+    # Collect and sort frame files
+    frame_files = [os.path.join(frames_dir, f) for f in os.listdir(frames_dir) if f.lower().endswith('.jpg') or f.lower().endswith('.jpeg')]
+    frame_files.sort()
+    if len(frame_files) == 0:
+        raise RuntimeError(f"No JPEG frames found in {frames_dir}")
+
+    list_path = os.path.join(work_dir, 'list.txt')
+    with open(list_path, 'w', encoding='utf-8') as f:
+        for fp in frame_files:
+            # Use concat demuxer; one frame per image
+            f.write(f"file '{fp.replace('\\\\', '/')}'\n")
+
+    out_path = os.path.join(work_dir, 'temp.mp4')
+    cmd = [
+        'ffmpeg', '-y',
+        '-f', 'concat', '-safe', '0',
+        '-i', list_path,
+        '-c:v', 'libx264',
+        '-pix_fmt', 'yuv420p',
+        '-movflags', '+faststart',
+        out_path
+    ]
+    # Run ffmpeg quietly but capture errors
+    result = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+    if result.returncode != 0 or not os.path.exists(out_path):
+        raise RuntimeError(f"ffmpeg failed to build video from {frames_dir}: {result.stderr[:500]}")
+    return out_path
+
+
 def process_single_video(args):
-    video_path, save_path = args
+    frames_dir, save_path = args
     try:
-        video_name = os.path.splitext(os.path.basename(video_path))[0]
-        motions, frame_types = extract_motions(video_path)
+        video_name = os.path.basename(frames_dir)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            temp_video_path = _build_temp_video_from_jpegs(frames_dir, tmpdir)
+            motions, frame_types = extract_motions(temp_video_path)
 
         if not motions:
             return None
@@ -85,7 +124,7 @@ def process_single_video(args):
         return (video_name, frame_types)
 
     except Exception as e:
-        print(f"Error processing {video_path}: {str(e)}")
+        print(f"Error processing {frames_dir}: {str(e)}")
         return None
 
 if __name__ == "__main__":
@@ -110,17 +149,12 @@ if __name__ == "__main__":
         help="Splits to process (default: train valid test)"
     )
     parser.add_argument(
-        "--video_cache",
-        type=str,
-        default="video_cache",
-        help="Directory containing video files (default: video_cache)"
-    )
-    parser.add_argument(
         "--num_workers",
         type=int,
         default=None,
         help="Number of worker processes (default: cpu_count - 2)"
     )
+    
     
     args = parser.parse_args()
     
@@ -144,10 +178,11 @@ if __name__ == "__main__":
             print(f"Warning: {jpeg_images_dir} does not exist, skipping {split}")
             continue
 
-        video_files = [os.path.join(args.video_cache, f+'.mp4') for f in os.listdir(jpeg_images_dir)]
+        # Build tasks from per-sequence JPEG folders
+        seq_dirs = [os.path.join(jpeg_images_dir, d) for d in os.listdir(jpeg_images_dir) if os.path.isdir(os.path.join(jpeg_images_dir, d))]
 
         with Pool(processes=NUM_WORKERS) as pool:
-            tasks = [(vf, motions_path) for vf in video_files]
+            tasks = [(sd, motions_path) for sd in seq_dirs]
             results = list(tqdm(
                 pool.imap(process_single_video, tasks),
                 total=len(tasks),
