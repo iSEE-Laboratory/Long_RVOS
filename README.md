@@ -114,7 +114,13 @@ wget https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alp
 
 ### Motion Extraction
 
-If you need to extract motion frames from videos, use:
+If you need to extract motion frames from videos:
+
+```bash
+pip install motion-vector-extractor==1.1.0
+```
+
+then,
 
 ```bash
 python scripts/extract_motion.py --data_dir data/long_rvos --output_dir motions
