@@ -13,6 +13,8 @@ Yuting Yang¹  &emsp;
 ¹Sun Yat-sen University &emsp;
 ²Shandong University
 
+**CVPR 2026**
+
 <h3 align="center">
   <a href="https://isee-laboratory.github.io/Long-RVOS/" target='_blank'>Project Page</a> |
   <a href="https://arxiv.org/pdf/2505.12702" target='_blank'>Paper
